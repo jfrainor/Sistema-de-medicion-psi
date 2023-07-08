@@ -103,6 +103,20 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['eliminar_medida'])) {
     <title>Mediciones de pozos petroleros - Histórico de Medidas</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.0/css/bootstrap.min.css">
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <link rel="stylesheet" href="assets/styles-index.css">
+
+    <script>
+    function validarRegistroMedida() {
+        var medida_psi = document.getElementById('registrar_medida_psi').value;
+
+        if (medida_psi < 0) {
+            alert('La medida PSI no puede ser un número negativo.');
+            return false;
+        }
+
+        return true;
+    }
+    </script>
 
 </head>
 <body>
@@ -118,7 +132,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['eliminar_medida'])) {
                         <a class="nav-link" href="index.php">Inicio</a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link" href="pozos.php">Pozos</a>
+                        <a class="nav-link" href="pozos.php">Gestionar Pozos</a>
                     </li>
                     <li class="nav-item">
                         <a class="nav-link" href="historico.php">Histórico de Medidas</a>
@@ -128,10 +142,11 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['eliminar_medida'])) {
         </div>
     </nav>
 
-    <div class="container">
+    <div class="container welcome-section">
         <!-- Selección del pozo -->
         <br>
         <h2>Seleccionar Pozo</h2>
+        <br>
         <form method="POST" action="">
             <div class="mb-3">
                 <label for="pozo_nombre" class="form-label">Nombre del Pozo</label>
@@ -163,6 +178,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['eliminar_medida'])) {
             if (!empty($medidas)) {
                 ?>
                 <!-- Tabla de medidas -->
+                <br>
+                <br>
                 <h2>Medidas del Pozo</h2>
                 <table class="table">
                     <thead>
@@ -203,7 +220,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['eliminar_medida'])) {
                         <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                     </div>
                     <div class="modal-body">
-                        <form method="POST" action="historico.php">
+                        <form method="POST" action="historico.php" onsubmit="return validarRegistroMedida()">
                             <div class="mb-3">
                                 <label for="editar_medida_psi" class="form-label">PSI</label>
                                 <input type="double" class="form-control" id="editar_medida_psi" name="editar_medida_psi" required>
@@ -240,6 +257,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['eliminar_medida'])) {
         </div>
 
         <!-- Gráfica comparativa -->
+        <br>
+        <br>
         <h2>Gráfica Comparativa</h2>
         <canvas id="graficoMedidas"></canvas>
         <br>

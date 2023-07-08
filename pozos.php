@@ -109,7 +109,43 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['eliminar_pozo'])) {
 <head>
     <title>Mediciones de pozos petroleros - Pozos</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.0/css/bootstrap.min.css">
+    <link rel="stylesheet" href="assets/styles-index.css">
+    <script>
+    //Validaciones
+    function validarRegistroPozo() {
+        var nombre = document.getElementById('nombre').value;
+        var ubicacion = document.getElementById('ubicacion').value;
+
+        var regexSoloNumeros = /^[0-9]+$/;
+        var regexAlMenosUnaLetra = /[a-zA-Z]/;
+
+        if (nombre.match(regexSoloNumeros) || ubicacion.match(regexSoloNumeros)) {
+            alert('El nombre y la ubicación deben contener al menos una letra.');
+            return false;
+        }
+
+        if (!nombre.match(regexAlMenosUnaLetra) || !ubicacion.match(regexAlMenosUnaLetra)) {
+            alert('El nombre y la ubicación deben contener al menos una letra.');
+            return false;
+        }
+
+        return true;
+    }
+    </script>
+    <script>
+    function validarRegistroMedida() {
+        var medida_psi = document.getElementById('registrar_medida_psi').value;
+
+        if (medida_psi < 0) {
+            alert('La medida PSI no puede ser un número negativo.');
+            return false;
+        }
+
+        return true;
+    }
+    </script>
 </head>
+
 <body>
     <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
         <div class="container">
@@ -123,7 +159,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['eliminar_pozo'])) {
                         <a class="nav-link" href="index.php">Inicio</a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link" href="pozos.php">Pozos</a>
+                        <a class="nav-link" href="pozos.php">Gestionar Pozos</a>
                     </li>
                     <li class="nav-item">
                         <a class="nav-link" href="historico.php">Histórico de Medidas</a>
@@ -133,12 +169,13 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['eliminar_pozo'])) {
         </div>
     </nav>
 
-    <div class="container">
+    <div class="container welcome-section">
 
         <!-- Formulario de registro de pozo -->
         <br>
         <h2>Registrar Pozo</h2>
-        <form method="POST" action="">
+        <br>
+        <form method="POST" action="" onsubmit="return validarRegistroPozo()">
             <div class="mb-3">
                 <label for="nombre" class="form-label">Nombre del pozo</label>
                 <input type="text" class="form-control" id="nombre" name="nombre" required>
@@ -152,7 +189,9 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['eliminar_pozo'])) {
 
         <!-- Tabla de pozos registrados -->
         <hr>
+        <br>
         <h2>Pozos Registrados</h2>
+        <br>
         <table class="table">
             <thead>
                 <tr>
@@ -195,7 +234,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['eliminar_pozo'])) {
                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
             <div class="modal-body">
-                <form method="POST" action="pozos.php">
+                <form method="POST" action="pozos.php" onsubmit="return validarRegistroMedida()">
                     <div class="mb-3">
                         <label for="registrar_medida_psi" class="form-label">PSI</label>
                         <input type="double" class="form-control" id="registrar_medida_psi" name="registrar_medida_psi" required>
