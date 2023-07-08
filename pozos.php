@@ -52,6 +52,17 @@ function eliminarPozo($pozo_id)
 {
     global $conexion;
 
+    // Verificar si existen medidas asociadas al pozo
+     $sqlVerificarMedidas = "SELECT COUNT(*) AS total FROM medidas WHERE pozos_idpozo = $pozo_id";
+     $result = $conexion->query($sqlVerificarMedidas);
+     $row = $result->fetch_assoc();
+     $totalMedidas = $row['total'];
+ 
+     if ($totalMedidas > 0) {
+         echo "El pozo seleccionado tiene medidas asociadas. Elimine las medidas primero.";
+         return;
+     }
+
     $sql = "DELETE FROM pozos WHERE idpozo=$pozo_id";
 
     if ($conexion->query($sql) === TRUE) {
